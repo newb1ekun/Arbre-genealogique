@@ -1,19 +1,24 @@
 
+import java.util.*;
 import java.util.List;
 
 public class Personne {
     private int id;
     private String nom;
     private String prenom;
-    private String sexe;
     private Date dateDeNaissance;
     private Date dateDeDeces;
+    private String nationalite;
+    private String sexe;
     private Personne pere;
     private Personne mere;
     private List<Personne> enfants;
+    
+    public Personne() {
+    }
 
     // Constructeur
-    public Personne(int id, String nom, String prenom, String sexe, Date dateDeNaissance, Date dateDeDeces,
+    public Personne(int id, String nom, String prenom, Date dateDeNaissance, Date dateDeDeces, String nationalite, String sexe,
                     Personne pere, Personne mere, List<Personne> enfants) {
         this.id = id;
         this.nom = nom;
@@ -21,6 +26,8 @@ public class Personne {
         this.sexe = sexe;
         this.dateDeNaissance = dateDeNaissance;
         this.dateDeDeces = dateDeDeces;
+        this.nationalite = nationalite;
+        this.sexe = sexe;
         this.pere = pere;
         this.mere = mere;
         this.enfants = enfants;
@@ -51,13 +58,6 @@ public class Personne {
         this.prenom = prenom;
     }
 
-    public String getSexe() {
-        return sexe;
-    }
-
-    public void setSexe(String sexe) {
-        this.sexe = sexe;
-    }
 
     public Date getDateDeNaissance() {
         return dateDeNaissance;
@@ -74,7 +74,23 @@ public class Personne {
     public void setDateDeDeces(Date dateDeDeces) {
         this.dateDeDeces = dateDeDeces;
     }
+    
+    public String getNationalite() {
+        return nationalite;
+    }
 
+    public void setNationalite(String nationalite) {
+        this.nationalite = nationalite;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+    
     public Personne getPere() {
         return pere;
     }
@@ -97,5 +113,9 @@ public class Personne {
 
     public void setEnfants(List<Personne> enfants) {
         this.enfants = enfants;
+    }
+    
+    public void ajoutEnfants(Personne personne) {
+    	this.enfants.add(personne);
     }
 }
