@@ -1,6 +1,8 @@
-
-import java.util.*;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Personne {
     private int id;
