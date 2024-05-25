@@ -24,8 +24,8 @@ public class Personne {
         this.nom = nom;
         this.prenom = prenom;
         this.sexe = sexe;
-        this.dateDeNaissance = dateDeNaissance;
-        this.dateDeDeces = dateDeDeces;
+        setDateDeNaissance(dateDeNaissance); // Use setter to apply validation
+        setDateDeDeces(dateDeDeces); 
         this.nationalite = nationalite;
         this.sexe = sexe;
         this.pere = pere;
@@ -63,7 +63,13 @@ public class Personne {
         return dateDeNaissance;
     }
 
-    public void setDateDeNaissance(Date dateDeNaissance) {
+    public void setDateDeNaissance(LocalDate dateDeNaissance) {
+        if (dateDeNaissance.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La date de naissance ne peut pas être dans le futur");
+        }
+         if (Period.between(dateDeNaissance, LocalDate.now()).getYears() > 120) {
+            throw new IllegalArgumentException("L'âge ne peut pas dépasser 120 ans");
+        }
         this.dateDeNaissance = dateDeNaissance;
     }
 
@@ -71,7 +77,10 @@ public class Personne {
         return dateDeDeces;
     }
 
-    public void setDateDeDeces(Date dateDeDeces) {
+    public void setDateDeDeces(LocalDate dateDeDeces) {
+        if (dateDeDeces != null && dateDeNaissance != null && dateDeDeces.isBefore(dateDeNaissance)) {
+            throw new IllegalArgumentException("La date de décès ne peut pas être avant la date de naissance");
+        }
         this.dateDeDeces = dateDeDeces;
     }
     
