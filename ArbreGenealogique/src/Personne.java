@@ -15,6 +15,7 @@ public class Personne {
     private Personne pere;
     private Personne mere;
     private List<Personne> enfants;
+    private boolean avoirDiabete;
     
     public Personne() {
     }
@@ -124,6 +125,13 @@ public class Personne {
 
     public void setEnfants(List<Personne> enfants) {
         this.enfants = enfants;
+    }
+    public boolean isAvoirDiabete() {
+        return avoirDiabete;
+    }
+
+    public void setAvoirDiabete(boolean avoirDiabete) {
+        this.avoirDiabete = avoirDiabete;
     }
     
    public void ajoutEnfants(Personne enfant) {
