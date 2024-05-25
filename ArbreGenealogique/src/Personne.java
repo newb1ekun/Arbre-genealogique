@@ -123,7 +123,7 @@ public class Personne {
         int ageParent = calculateAge(this.dateDeNaissance, LocalDate.now());
         int ageEnfant = calculateAge(enfant.getDateDeNaissance(), LocalDate.now());
 
-        if (ageEnfant >= ageParent) {
+        if (ageEnfant >= (ageParent+15)) {
             throw new IllegalArgumentException("L'âge de l'enfant doit être inférieur à celui du parent");
         }
 
