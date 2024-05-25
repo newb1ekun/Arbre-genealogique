@@ -115,7 +115,29 @@ public class Personne {
         this.enfants = enfants;
     }
     
-    public void ajoutEnfants(Personne personne) {
-    	this.enfants.add(personne);
+   public void ajoutEnfants(Personne enfant) {
+        if (enfant == null) {
+            throw new IllegalArgumentException("L'enfant ne peut pas être null");
+        }
+
+        int ageParent = calculateAge(this.dateDeNaissance, LocalDate.now());
+        int ageEnfant = calculateAge(enfant.getDateDeNaissance(), LocalDate.now());
+
+        if (ageEnfant >= ageParent) {
+            throw new IllegalArgumentException("L'âge de l'enfant doit être inférieur à celui du parent");
+        }
+
+        if (this.enfants == null) {
+            this.enfants = new ArrayList<>();
+        }
+        this.enfants.add(enfant);
+    }
+
+    private int calculateAge(LocalDate birthDate, LocalDate currentDate) {
+        if (birthDate != null && currentDate != null) {
+            return Period.between(birthDate, currentDate).getYears();
+        } else {
+            return 0;
+        }
     }
 }
