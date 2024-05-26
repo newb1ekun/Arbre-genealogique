@@ -1,20 +1,26 @@
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.util.*;
 
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.*;
+
+
 public class Extraction {
+	public static void main(String[] args) {
+		Extraction obj = new Extraction();
+		obj.ExcelExtraction();
+	}
 
-    public static void main(String[] args) {
+    public String ExcelExtraction() {
         // Le chemin du fichier Excel
-        String fileName = "familles.xlsx";
-        
-        try (FileInputStream fis = new FileInputStream(fileName);
-                Workbook workbook = new XSSFWorkbook(fis)) {
-
+        String excelFile = "familles.xlsx";
+        try (FileInputStream fis = new FileInputStream(excelFile); Workbook workbook = WorkbookFactory.create(fis)) {
+        	
         	// Obtenir la première feuille de calcul
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -30,37 +36,68 @@ public class Extraction {
             List<Personne> personnes = new ArrayList<>();
             
             // Parcourir les lignes de la feuille de calcul
-            for (Row row : sheet) {
+            for (int rowIndex = 0; rowIndex < 10; rowIndex++) {
+                Row row = sheet.getRow(rowIndex);
                 // Ignorer l'en-tête
                 if (row.getRowNum() == 0) {
                     continue;
                 }
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                
 
                 // Extraire les données de la personne
+                Personne personneajoute = new Personne();
+                
                 int id = (int) row.getCell(idc).getNumericCellValue();
+                personneajoute.setId(id);
+                
                 String nom = row.getCell(nomc).getStringCellValue();
+                personneajoute.setNom(nom);
+                
                 String prenom = row.getCell(prenomc).getStringCellValue();
-                Date dateDeNaissance = row.getCell(dateDeNaissancec).getDateCellValue();
+                personneajoute.setPrenom(prenom);
+                
+                String dateDN = row.getCell(dateDeNaissancec).getStringCellValue();
+                LocalDate dateDeNaissance = null;
+                try {
+                    // Convertir la chaîne de caractères en LocalDate
+                    dateDeNaissance = LocalDate.parse(dateDN, formatter);
+                    
+                    // Afficher la date convertie
+                    System.out.println("Date convertie (java.time.LocalDate) : " + dateDeNaissance);
+                } catch (DateTimeParseException e) {
+                    System.err.println("Erreur de format de date : " + e.getMessage());
+                }
+                personneajoute.setDateDeNaissance(dateDeNaissance);
+                
+                personneajoute.setDateDeDeces(dateDeNaissance);
+                
                 String nationalite = row.getCell(nationalitec).getStringCellValue();
+                personneajoute.setNationalite(nationalite);
+                
                 String sexe = row.getCell(sexec).getStringCellValue();
+                personneajoute.setSexe(sexe);
+
                 int pereid = (int) row.getCell(perec).getNumericCellValue();
                 int mereid = (int) row.getCell(merec).getNumericCellValue();
-                Personne pere = new Personne();
-                Personne mere = new Personne();
+                
                 for (Personne personne : personnes) {
                 	if (personne.getId() == pereid) {
-                		pere = personne;
+                		personneajoute.setPere(personne);
                 	}
                 	if (personne.getId() == mereid) {
-                		mere = personne;
+                		personneajoute.setMere(personne);
                 	}
                 }
-                List<Personne> enfants = new ArrayList<>();
                 
+                List<Personne> enfants = new ArrayList<Personne>();
+                personneajoute.setEnfants(enfants);
                 
+               /*
                 // Créer un objet Personne
-                Personne personneajoute = new Personne(id, nom, prenom, dateDeNaissance,dateDeNaissance, nationalite, sexe, pere, mere, enfants);
-                personnes.add(new Personne(id, nom, prenom, dateDeNaissance,dateDeNaissance, nationalite, sexe, pere, mere, enfants));
+                Personne personneajoute = new Personne(id, nom, prenom, dateDeNaissance, dateDeNaissance, nationalite, sexe, pere, mere, enfants);
+                personnes.add(personneajoute);*/
 
                 // Traiter ou enregistrer l'objet Person
                 System.out.println(personneajoute); // Afficher la personne à l'écran
@@ -73,12 +110,15 @@ public class Extraction {
                 		personne.ajoutEnfants(personneajoute);
                 	}
                 }
-                
             }
+            workbook.close();
             System.out.println("Reading File Completed.");
+            
 
            } catch (IOException e) {
+        	   System.out.println("ExcelExtraction catch block");
                e.printStackTrace();
            }
+        return "test";
     }
 }
